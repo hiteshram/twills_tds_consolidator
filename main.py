@@ -91,15 +91,15 @@ def get_tds_consolidation():
             tds_percentage=0.00
     
         for key1,value1 in tds_sum_df.items():
-            assessable_value=sum(value1["Assessable Value"])
-            tds_total=(assessable_value*tds_percentage)/100   
-            row_dict={"Party Account":pan_master[key1.strip()],"TDS Transaction Nature":key,"PAN":key1,"Assessable Value":float(assessable_value),
-            "TDS Rate":float(tds_percentage),"TDS Amount":float(tds_total)}
+            assessable_value=round(sum(value1["Assessable Value"]))
+            tds_total=round((assessable_value*tds_percentage)/100)   
+            row_dict={"Party Account":pan_master[key1.strip()],"TDS Transaction Nature":key,"PAN":key1,"Assessable Value":int(assessable_value),
+            "TDS Rate":float(tds_percentage),"TDS Amount":int(tds_total)}
             tds_final_df=tds_final_df.append(row_dict,ignore_index=True)
             
         category_final_master[key]=tds_final_df
-        category_final_total[key]=float(sum(tds_final_df["Assessable Value"]))
-        category_final_tds[key]=float(sum(tds_final_df["TDS Amount"]))
+        category_final_total[key]=int(sum(tds_final_df["Assessable Value"]))
+        category_final_tds[key]=int(sum(tds_final_df["TDS Amount"]))
 
     for key,value in category_final_master.items():
         temp=key.split("-")
@@ -120,7 +120,7 @@ def get_tds_consolidation():
     tds_salary_df_final=pd.DataFrame(columns=["Party Account","TDS Transaction Nature","PAN","Assessable Value","TDS Rate","TDS Amount"])
     for index, row in tds_salary_df.iterrows(): 
         row_dict={"Party Account":row["Party Account"],"TDS Transaction Nature":row["TDS Transaction Nature"],"PAN":row["PAN"],
-                "Assessable Value":float(row["Assessable Value"]),"TDS Rate":float(0),"TDS Amount":float(row["TDS Amount"])}
+                "Assessable Value":int(round(row["Assessable Value"])),"TDS Rate":int(0),"TDS Amount":int(round(row["TDS Amount"]))}
         
         tds_salary_df_final=tds_salary_df_final.append(row_dict,ignore_index=True)
     
