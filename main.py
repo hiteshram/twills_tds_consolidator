@@ -39,8 +39,9 @@ def get_books_file_path():
         message_desc.after(1000,message_desc.destroy)
 
 def get_tds_consolidation():
+    global tds_file_path 
     cwd=os.getcwd()
-    tds_file_path=os.path.join(cwd,"data","tds data.xlsx")
+    #tds_file_path=os.path.join(cwd,"data","tds data.xlsx")
     tds_wb=op.load_workbook(tds_file_path)
     tds_df=pd.DataFrame(tds_wb.active.values)
     tds_df.columns=tds_df.iloc[4]
@@ -102,9 +103,9 @@ def get_tds_consolidation():
 
     for key,value in category_final_master.items():
         temp=key.split("-")
-        tds_category=temp[0]
+        tds_category=temp[0]+" - "+temp[1]
         
-        row_dict={"Party Account":"Total "+tds_category,"TDS Transaction Nature":"","PAN":"","Assessable Value":category_final_total[key],
+        row_dict={"Party Account":"Total for "+tds_category,"TDS Transaction Nature":"","PAN":"","Assessable Value":category_final_total[key],
             "TDS Rate":"","TDS Amount":category_final_tds[key]}
         category_final_master[key]=category_final_master[key].append(row_dict,ignore_index=True)
         row_dict={"Party Account":" ","TDS Transaction Nature":"","PAN":"","Assessable Value":"","TDS Rate":"","TDS Amount":""}
@@ -126,7 +127,7 @@ def get_tds_consolidation():
     tds_sal_total=sum(list(tds_salary_df_final["Assessable Value"]))
     tds_tds_total=sum(list(tds_salary_df_final["TDS Amount"]))
     
-    row_dict={"Party Account":"Total SALARIES","TDS Transaction Nature":"","PAN":"","Assessable Value":tds_sal_total,
+    row_dict={"Party Account":"Total for SALARIES - 92B","TDS Transaction Nature":"","PAN":"","Assessable Value":tds_sal_total,
             "TDS Rate":"","TDS Amount":tds_tds_total}
     
     tds_salary_df_final=tds_salary_df_final.append(row_dict,ignore_index=True)
